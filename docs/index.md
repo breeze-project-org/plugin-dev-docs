@@ -10,12 +10,12 @@ sidebar_label: 文档首页
 若你用 AI 助手写插件或改代码，建议把本仓库 **clone 到工作区**，让 AI 直接读本地 Markdown，而不是反复抓取在线页面。
 
 ```bash
-git clone https://github.com/deretame/plugin-dev-docs.git
+git clone https://github.com/breeze-project-org/plugin-dev-docs.git
 ```
 
 已有本地副本时，先 `git fetch` / `git pull` 再让 AI 阅读，避免对着过期文档改代码。
 
-- 仓库：[github.com/deretame/plugin-dev-docs](https://github.com/deretame/plugin-dev-docs)
+- 仓库：[github.com/breeze-project-org/plugin-dev-docs](https://github.com/breeze-project-org/plugin-dev-docs)
 - 文档目录：`docs/guide/`（中文）、`i18n/en/docusaurus-plugin-content-docs/current/guide/`（英文）
 :::
 
@@ -31,7 +31,7 @@ git clone https://github.com/deretame/plugin-dev-docs.git
 > `https://github.com/deretame/Breeze-plugin-example`
 >
 > 如有建议或发现文档问题，请直接提交 issue：
-> `https://github.com/deretame/Breeze/issues`
+> `https://github.com/breeze-project-org/Breeze/issues`
 
 ## 文档内容
 

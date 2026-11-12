@@ -3,9 +3,9 @@ const { themes: prismThemes } = require("prism-react-renderer");
 const config = {
   title: "Breeze Plugin Docs",
   tagline: "Plugin development handbook for third-party Breeze authors",
-  url: "https://deretame.github.io",
+  url: "https://breeze-project-org.github.io",
   baseUrl: "/plugin-dev-docs/",
-  organizationName: "deretame",
+  organizationName: "breeze-project-org",
   projectName: "plugin-dev-docs",
 
   onBrokenLinks: "throw",
@@ -62,7 +62,7 @@ const config = {
           position: "right"
         },
         {
-          href: "https://github.com/deretame/Breeze",
+          href: "https://github.com/breeze-project-org/Breeze",
           label: "GitHub",
           position: "right"
         }

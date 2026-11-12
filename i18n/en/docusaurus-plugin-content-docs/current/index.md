@@ -10,12 +10,12 @@ sidebar_label: Home
 If you use an AI assistant to write or change plugin code, **clone this repository into your workspace** so the AI can read the local Markdown — instead of scraping the live site repeatedly.
 
 ```bash
-git clone https://github.com/deretame/plugin-dev-docs.git
+git clone https://github.com/breeze-project-org/plugin-dev-docs.git
 ```
 
 If you already have a local copy, run `git fetch` / `git pull` before letting the AI read it, so you are not working against outdated docs.
 
-- Repository: [github.com/deretame/plugin-dev-docs](https://github.com/deretame/plugin-dev-docs)
+- Repository: [github.com/breeze-project-org/plugin-dev-docs](https://github.com/breeze-project-org/plugin-dev-docs)
 - Docs: `docs/guide/` (Chinese), `i18n/en/docusaurus-plugin-content-docs/current/guide/` (English)
 :::
 
@@ -31,7 +31,7 @@ This documentation focuses on the plugin API contract, page protocol, debugging,
 > `https://github.com/deretame/Breeze-plugin-example`
 >
 > Suggestions or doc issues can be filed at:
-> `https://github.com/deretame/Breeze/issues`
+> `https://github.com/breeze-project-org/Breeze/issues`
 
 ## What's Covered
 

@@ -33,6 +33,7 @@ Globals available after plugin startup:
 - `bytesToBase64` / `bytesFromBase64`
 - `hostCrypto`
 - `__web`
+- `fronting` (host fronting: `setHosts` / `getHosts` / `clearHosts` / `probe`)
 
 > ⚠️ **Note: `fs` is not available.** `breeze-plugin-kit` keeps `fs` type declarations for running plugin code in pure Node.js test environments, but Breeze **does not inject an `fs` API into the real plugin runtime**. This is intentional for security: direct host filesystem access is too risky. Plugins should talk to the outside world via `fetch` and similar network APIs — do not use `fs` in plugins.
 
@@ -45,3 +46,4 @@ Choose a focused page below when you need a specific runtime API.
 - [Temporal & Intl](/guide/runtime-api/time-and-intl)
 - [Built-ins & Utilities](/guide/runtime-api/built-ins)
 - [BreezeHtml & Development Pattern](/guide/runtime-api/html-and-patterns)
+- [Host Fronting & Network Measurement](/guide/runtime-api/network-fronting) (IP direct, latency probing, `Response.hostMeta`)

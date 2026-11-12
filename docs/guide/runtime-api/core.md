@@ -55,6 +55,23 @@ const buf = await res.arrayBuffer();
 
 > 建议：在 `fetchImageBytes` 中**始终携带该请求头**，这是图片能正常显示的最常见原因之一。
 
+### 响应测量 `hostMeta`
+
+每个 `fetch` 响应都带一个非标准扩展字段 `hostMeta`，记录宿主侧的测量结果：
+
+```js
+const res = await fetch(url);
+const { ip, host, peerIp, bytes, ttfbMs, bodyMs } = res.hostMeta;
+```
+
+- `ip` / `host`：本次走的是哪个前置 IP / 域名，未走域名前置时都是 `null`
+- `peerIp`：实际 TCP 对端 IP（走代理时是代理地址）
+- `bytes`：响应体字节数
+- `ttfbMs`：发出请求到收到响应头（含建连 + TLS 握手 + 首字节）
+- `bodyMs`：响应头到 body 读完，`bytes / bodyMs` 即本次吞吐
+
+宿主只测量不做优选，插件可以据此做被动测速或归因。域名前置（IP 直连）的完整说明见 [域名前置与网络测量](/guide/runtime-api/network-fronting)。
+
 ## bridge
 
 插件与 Rust 宿主通信的唯一桥梁。

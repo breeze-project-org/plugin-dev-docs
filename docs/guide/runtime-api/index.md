@@ -33,6 +33,7 @@ Breeze 插件运行在 QuickJS-NG 引擎中，不是 Node.js 也不是浏览器�
 - `bytesToBase64` / `bytesFromBase64`
 - `hostCrypto`
 - `__web`
+- `fronting`（域名前置：`setHosts` / `getHosts` / `clearHosts` / `probe`）
 
 > ⚠️ **注意：`fs` 不在可用列表中。** `breeze-plugin-kit` 里保留了 `fs` 的类型声明，用于在纯 Node.js 测试环境中运行插件代码，但 Breeze **不会向正式运行时的插件注入 `fs` API**。这是出于安全考虑：允许插件直接访问宿主文件系统风险过高。插件应通过 `fetch` 等网络请求与外部交互，请不要在插件中使用 `fs`。
 
@@ -45,3 +46,4 @@ Breeze 插件运行在 QuickJS-NG 引擎中，不是 Node.js 也不是浏览器�
 - [Temporal 与 Intl](/guide/runtime-api/time-and-intl)
 - [内置对象与工具](/guide/runtime-api/built-ins)
 - [BreezeHtml 与开发范式](/guide/runtime-api/html-and-patterns)
+- [域名前置与网络测量](/guide/runtime-api/network-fronting)（IP 直连、延迟探测、`Response.hostMeta`）

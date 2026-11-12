@@ -344,6 +344,81 @@ await flutterTools.showToast({
 | `timezoneOffsetMinutes` | `number` | 时区偏移分钟数，便于直接计算                                 |
 | `timezoneName`          | `string` | 系统时区缩写，如 `CST` / `EST`                               |
 
+### `fronting` — 域名前置与网络测量 {#fronting}
+
+宿主提供域名前置（IP 直连）能力：把请求改写成「连真实 IP + 不发 SNI + 带 `Host` 头」，用于绕过 DNS 污染与 SNI 阻断。
+
+```ts
+import {
+  clearFrontHosts,
+  getFrontHosts,
+  pickBestFrontIps,
+  probeFrontHosts,
+  setFrontHosts,
+} from "breeze-plugin-kit";
+
+// 下发内置表：值是 IP 字面量，IPv6 可用裸写或 [...] 写法
+setFrontHosts({ "e-hentai.org": ["172.66.132.196", "2606:4700::1"] });
+
+// 读回表 + 健康状态（healthy=false 表示 5 分钟冷却中）
+const table = getFrontHosts();
+
+// 探测候选 IP（不需要先写进表）
+const report = await probeFrontHosts({
+  host: "e-hentai.org",
+  ips: ["172.66.132.196", "172.66.140.62"],
+  samples: 2,
+});
+
+// 取最优的几个写回
+const best = pickBestFrontIps(report, { limit: 3, maxLossRate: 0.34 });
+if (best.length > 0) setFrontHosts({ "e-hentai.org": best });
+
+// 关闭前置
+clearFrontHosts();
+```
+
+| 导出 | 说明 |
+| --- | --- |
+| `setFrontHosts(table)` | 下发前置表，返回 `{ ok, hosts, ips, rejected, allowPrivateNetwork }` |
+| `getFrontHosts()` | 读回前置表与每个 IP 的健康状态 |
+| `clearFrontHosts()` | 清空前置表（等于关闭前置） |
+| `probeFrontHosts(payload, { signal })` | 探测延迟，返回 `{ ok, results }`；支持 `AbortSignal` 取消 |
+| `rankFrontHosts(report, opts)` / `pickBestFrontIps(report, opts)` | 过滤不可用 IP 并按延迟排序 |
+| `setEchHosts(table)` / `getEchHosts()` / `clearEchHosts()` | 登记走 ECH（加密 SNI）的域名，适合必须看 SNI 的 Cloudflare 站点 |
+
+`probeFrontHosts` 的完整参数、返回字段、错误码与限流规则见 [域名前置与网络测量](/guide/runtime-api/network-fronting#front-probe)。限流按插件隔离（单插件 4 个并发采样、2 个并发批次），不要把它当高频轮询接口用。
+
+ECH 的用法（ECHConfig 和 IP 都可以省略，宿主会用 DoH 的 HTTPS 记录补齐）：
+
+```ts
+import { setEchHosts } from "breeze-plugin-kit";
+
+setEchHosts({ "picaapi.part26.art": {} });
+```
+
+和前置的区别：前置是「不发 SNI + `Host` 头」，ECH 是「加密 SNI + 域名 URL」；同一个域名不要两边都登记。详见 [域名前置与网络测量 · ECH](/guide/runtime-api/network-fronting#ech)。
+
+不想引入 kit 时，也可以直接用运行时注入的 `fronting` 对象（`fronting.setHosts` / `getHosts` / `clearHosts` / `probe` / `setEchHosts`），参数与返回值一致。
+
+`fetch` 响应上的 `hostMeta` 类型由 kit 注入（`HostMeta`），提供本次请求的实际 IP 与分段耗时：
+
+```ts
+const res = await fetch(url);
+const meta = res.hostMeta;
+if (meta?.ip && meta.bodyMs > 0) {
+  throughput.set(meta.ip, meta.bytes / meta.bodyMs);
+}
+```
+
+| 字段 | 说明 |
+| --- | --- |
+| `ip` / `host` | 本次走的前置 IP / 域名，未前置时为 `null` |
+| `peerIp` | 实际 TCP 对端 IP（走代理时是代理地址） |
+| `bytes` | 响应体字节数 |
+| `ttfbMs` | 发出请求 → 收到响应头（含建连 + TLS 握手 + 首字节） |
+| `bodyMs` | 响应头 → body 读完，`bytes / bodyMs` 即本次吞吐 |
+
 ### `pictureTools.cropImageByRegions` — 裁剪图片区域
 
 `cropImageByRegions` 用于把一张图片中的多个区域裁剪成独立图片。坐标原点位于原图左上角，返回结果中的 `imgData` 是 WebP 字节数据。

@@ -36,7 +36,7 @@ git clone https://github.com/deretame/plugin-dev-docs.git
 ## 文档内容
 
 - 基于示例仓库直接开工
-- 运行时 API 参考（`fetch`、`bridge`、`crypto`、`Temporal`、时间向 `Intl`、`BreezeHtml` 等）
+- 运行时 API 参考（`fetch`、`bridge`、`crypto`、`Temporal`、时间向 `Intl`、`BreezeHtml`、域名前置与网络测量等）
 - `breeze-plugin-kit` 工具包使用说明（类型、`cache`、`pluginConfig`、`opencc`、Temporal、Intl、HTML 解析等）
 - 所有 fnPath 的 TypeScript 类型定义与调用语义
 - 云端收藏工作流（选择/创建收藏夹、从目标收藏夹移除、继续与取消）
@@ -62,7 +62,7 @@ git clone https://github.com/deretame/plugin-dev-docs.git
 ## 推荐阅读顺序
 
 1. [快速开始](/guide/quick-start)
-  2. [运行时 API](/guide/runtime-api)（重点看 `fetch`、`BreezeHtml`、`crypto`、`Temporal`、`Intl`）
+  2. [运行时 API](/guide/runtime-api)（重点看 `fetch`、`BreezeHtml`、`crypto`、`Temporal`、`Intl`、[域名前置](/guide/runtime-api/network-fronting)）
   3. [breeze-plugin-kit 工具包](/guide/plugin-kit)（重点看 `cache`、`pluginConfig`、Temporal、Intl、HTML 解析类型）
 4. [生命周期与结构](/guide/runtime-and-structure)
 5. [插件 API 契约](/guide/plugin-api-contract)

@@ -56,6 +56,23 @@ const buf = await res.arrayBuffer();
 
 > Recommendation: **always include this header** in `fetchImageBytes`. Missing it is one of the most common reasons images fail to display.
 
+### Response measurement `hostMeta`
+
+Every `fetch` response carries a non-standard extension field, `hostMeta`, with host-side measurements:
+
+```js
+const res = await fetch(url);
+const { ip, host, peerIp, bytes, ttfbMs, bodyMs } = res.hostMeta;
+```
+
+- `ip` / `host`: which fronted IP / domain this request used; both `null` when host fronting is not in play
+- `peerIp`: actual TCP peer IP (the proxy address when a proxy is used)
+- `bytes`: response body size
+- `ttfbMs`: request sent → response headers (includes connect + TLS handshake + first byte)
+- `bodyMs`: headers → body fully read; `bytes / bodyMs` is this request's throughput
+
+The host only measures and never ranks; plugins can use this for passive measurement or attribution. Full host-fronting (IP direct) docs: [Host Fronting & Network Measurement](/guide/runtime-api/network-fronting).
+
 ## bridge
 
 The sole bridge between the plugin and the Rust host.

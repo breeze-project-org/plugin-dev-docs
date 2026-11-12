@@ -333,6 +333,81 @@ await flutterTools.showToast({
 | `timezoneOffsetMinutes` | `number` | Offset in minutes                                      |
 | `timezoneName`          | `string` | System zone abbreviation, e.g. `CST` / `EST`           |
 
+### `fronting` — Host Fronting & Network Measurement {#fronting}
+
+The host provides host fronting (IP direct): requests are rewritten into "connect to the real IP + send no SNI + carry a `Host` header", which bypasses DNS poisoning and SNI blocking.
+
+```ts
+import {
+  clearFrontHosts,
+  getFrontHosts,
+  pickBestFrontIps,
+  probeFrontHosts,
+  setFrontHosts,
+} from "breeze-plugin-kit";
+
+// Install a built-in table: values are IP literals, IPv6 bare or in [...]
+setFrontHosts({ "e-hentai.org": ["172.66.132.196", "2606:4700::1"] });
+
+// Read back the table plus per-IP health (healthy=false means 5-min cooldown)
+const table = getFrontHosts();
+
+// Probe candidate IPs (no prior registration needed)
+const report = await probeFrontHosts({
+  host: "e-hentai.org",
+  ips: ["172.66.132.196", "172.66.140.62"],
+  samples: 2,
+});
+
+// Write back the best few
+const best = pickBestFrontIps(report, { limit: 3, maxLossRate: 0.34 });
+if (best.length > 0) setFrontHosts({ "e-hentai.org": best });
+
+// Disable fronting
+clearFrontHosts();
+```
+
+| Export | Notes |
+| --- | --- |
+| `setFrontHosts(table)` | Install the front table; returns `{ ok, hosts, ips, rejected, allowPrivateNetwork }` |
+| `getFrontHosts()` | Read back the table and per-IP health |
+| `clearFrontHosts()` | Clear the front table (same as disabling) |
+| `probeFrontHosts(payload, { signal })` | Probe latency; returns `{ ok, results }` and supports `AbortSignal` cancellation |
+| `rankFrontHosts(report, opts)` / `pickBestFrontIps(report, opts)` | Filter unusable IPs and sort by latency |
+| `setEchHosts(table)` / `getEchHosts()` / `clearEchHosts()` | Register domains for ECH (encrypted SNI); for Cloudflare sites that require SNI |
+
+Full parameters, response fields, error codes and rate limits are in [Host Fronting & Network Measurement](/guide/runtime-api/network-fronting#front-probe). Rate limits are per plugin (4 concurrent samples, 2 concurrent batches) — do not treat probing as a high-frequency polling API.
+
+ECH usage (both ECHConfig and IPs are optional; the host fills them in via DoH HTTPS records):
+
+```ts
+import { setEchHosts } from "breeze-plugin-kit";
+
+setEchHosts({ "picaapi.part26.art": {} });
+```
+
+Difference from fronting: fronting sends no SNI plus a `Host` header; ECH encrypts SNI and keeps the domain URL. Do not register the same domain for both. See [Host Fronting & Network Measurement · ECH](/guide/runtime-api/network-fronting#ech).
+
+If you prefer not to depend on the kit, the runtime also injects a `fronting` object (`fronting.setHosts` / `getHosts` / `clearHosts` / `probe` / `setEchHosts`) with the same parameters and return values.
+
+`hostMeta` on `fetch` responses is typed by the kit (`HostMeta`) and reports the IP actually used plus split timings:
+
+```ts
+const res = await fetch(url);
+const meta = res.hostMeta;
+if (meta?.ip && meta.bodyMs > 0) {
+  throughput.set(meta.ip, meta.bytes / meta.bodyMs);
+}
+```
+
+| Field | Notes |
+| --- | --- |
+| `ip` / `host` | Fronted IP / domain for this request; `null` when not fronted |
+| `peerIp` | Actual TCP peer IP (the proxy address when a proxy is used) |
+| `bytes` | Response body size |
+| `ttfbMs` | Request sent → response headers (connect + TLS handshake + first byte) |
+| `bodyMs` | Headers → body fully read; `bytes / bodyMs` is this request's throughput |
+
 ### `pictureTools.cropImageByRegions` — Crop Image Regions
 
 `cropImageByRegions` cuts multiple regions from one image into independent images. The coordinate origin is the top-left corner of the source image. Each returned `imgData` contains WebP bytes.

@@ -35,6 +35,7 @@ import type {
 - `pluginConfig.*` — 持久化配置
 - `opencc.*` — 简繁转换
 - `flutterTools.*` — Flutter 宿主交互（Toast、获取版本等）
+- `setFrontHosts` / `probeFrontHosts` / `pickBestFrontIps` — 域名前置（IP 直连）与延迟探测
 - `runtime.*` — 运行时工具（GC、任务取消检查等）
 
 详细用法见 [breeze-plugin-kit 工具包](/guide/plugin-kit)。

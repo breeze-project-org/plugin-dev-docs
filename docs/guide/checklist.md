@@ -29,6 +29,7 @@
 - [ ] 登录过期返回 unauthorized 结构化错误
 - [ ] `fetchImageBytes` 直接返回 `Uint8Array`，请求携带 `x-rquickjs-host-offload-binary-v1: 1`
 - [ ] 所有 `ImageItem.url` 填写有效占位符字符串，不为空或 404
+- [ ] 若使用域名前置：通过 `setFrontHosts` / `probeFrontHosts` 接入，并对返回的 `ok: false` 做兜底
 - [ ] 调试模式与发布模式都跑通过
 
 ## 发布

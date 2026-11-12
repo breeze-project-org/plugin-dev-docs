@@ -36,7 +36,7 @@ This documentation focuses on the plugin API contract, page protocol, debugging,
 ## What's Covered
 
 - Start from the example repository
-- Runtime API reference (`fetch`, `bridge`, `crypto`, `Temporal`, time-focused `Intl`, `BreezeHtml`, etc.)
+- Runtime API reference (`fetch`, `bridge`, `crypto`, `Temporal`, time-focused `Intl`, `BreezeHtml`, host fronting & network measurement, etc.)
 - `breeze-plugin-kit` toolkit guide (types, `cache`, `pluginConfig`, `opencc`, Temporal, Intl, HTML parsing, etc.)
 - TypeScript types and call semantics for every fnPath
 - Scheme + data page protocol

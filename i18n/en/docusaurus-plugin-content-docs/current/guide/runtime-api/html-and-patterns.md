@@ -35,6 +35,7 @@ See [breeze-plugin-kit Toolkit](/guide/plugin-kit).
 - `pluginConfig.*` — persistent config
 - `opencc.*` — Simplified/Traditional Chinese conversion
 - `flutterTools.*` — Flutter host interaction (Toast, version, etc.)
+- `setFrontHosts` / `probeFrontHosts` / `pickBestFrontIps` — host fronting (IP direct) and latency probing
 - `runtime.*` — runtime utilities (GC, task-group cancel checks, etc.)
 
 Details: [breeze-plugin-kit Toolkit](/guide/plugin-kit).

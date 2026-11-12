@@ -29,6 +29,7 @@
 - [ ] Auth expiry returns structured unauthorized errors
 - [ ] `fetchImageBytes` returns `Uint8Array` directly, with header `x-rquickjs-host-offload-binary-v1: 1`
 - [ ] All `ImageItem.url` values are valid non-empty placeholders (not empty or 404)
+- [ ] If host fronting is used: go through `setFrontHosts` / `probeFrontHosts` and handle `ok: false` results
 - [ ] Both debug mode and release mode pass end-to-end
 
 ## Release

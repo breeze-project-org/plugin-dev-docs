@@ -68,6 +68,8 @@ import type {
 
 运行时全局对象的类型也会自动注入，例如 `bridge`、`crypto`、`native`、`Temporal`、`Intl`、`BreezeHtml`、`bytesToBase64`、`bytesFromBase64` 等，无需额外声明。
 
+`FilterField.kind` 支持 `"choice"` 和 `"dropdown"`；`"dropdown"` 用于几十上百项的长列表（如每周必看期数），筛选函数仍返回 `FilterBundleContract`。
+
 云端收藏的多步操作协议见[云端收藏工作流](/guide/favorite-workflow)。
 
 ### Temporal 类型

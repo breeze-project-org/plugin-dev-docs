@@ -1009,10 +1009,11 @@ type ComicPagedListContract = {
 
 配置后，用户点击列表页筛选按钮时宿主调用该函数。
 
-筛选面板按 `scheme.fields[]` 渲染为分组单选：每个 `field` 一组，`label` 为组标题，
-`options[].label` 为选项文案。`data.values` 以 `field.key` 为键给出每组的默认选中
+筛选面板按 `scheme.fields[]` 渲染：每个 `field` 一组，`label` 为组标题，
+`options[].label` 为选项文案。`kind: "choice"` 渲染为分组单选；`kind: "dropdown"`
+渲染为可点击展开的下拉框，适合几十上百项的长列表，`children` 会缩进展开在父项下方
+（父项本身仍可选）。`data.values` 以 `field.key` 为键给出每组的默认选中
 （`value` 语义由插件自定，宿主只做透传比对），为空时该组无默认选中。
-`option.children` 用于二级联动选项（如选中某分类后展开子分类）。
 `option.result.core` / `result.extern` 在用户确认后合并进下一次列表请求，合并规则见 6.2。
 
 ```ts
@@ -1035,7 +1036,7 @@ type FilterBundleContract = {
 
 type FilterField = {
   key: string;
-  kind: "choice";
+  kind: "choice" | "dropdown";
   label: string;
   options: FilterOption[];
 };

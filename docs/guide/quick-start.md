@@ -83,6 +83,39 @@ export const PLUGIN_ID = "你的插件UUID";
 }
 ```
 
+「每周必看」这类列表页直接用 `openComicList` + `ComicListScene`，筛选和云端收藏一样走 `scene.filter`：
+
+```ts
+{
+  id: "week",
+  title: "每周必看",
+  action: {
+    type: "openComicList",
+    payload: {
+      scene: {
+        title: "每周必看",
+        source: PLUGIN_ID,
+        body: {
+          type: "pluginPagedComicList",
+          request: {
+            fnPath: "getWeekMustWatchData",
+            core: {},
+            extern: { source: "weekMustWatch" },
+          },
+        },
+        filter: {
+          fnPath: "getWeekFilterBundle",
+          core: {},
+          extern: { source: "weekMustWatch" },
+        },
+      },
+    },
+  },
+}
+```
+
+筛选函数返回 `FilterBundleContract`；期数这类长列表用 `kind: "dropdown"`，少量分类用 `kind: "choice"`。
+
 ## 4) 推荐起步顺序
 
 建议按以下顺序逐步接入 API，方便每步验证：

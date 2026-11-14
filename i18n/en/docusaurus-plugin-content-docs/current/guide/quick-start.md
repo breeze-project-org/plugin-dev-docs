@@ -83,6 +83,40 @@ The `buildPluginInfo().function` array defines feature entries shown on the Disc
 }
 ```
 
+For a list page such as "Weekly Picks", use `openComicList` + `ComicListScene`; filtering uses `scene.filter`, same as cloud favorites:
+
+```ts
+{
+  id: "week",
+  title: "Weekly Picks",
+  action: {
+    type: "openComicList",
+    payload: {
+      scene: {
+        title: "Weekly Picks",
+        source: PLUGIN_ID,
+        body: {
+          type: "pluginPagedComicList",
+          request: {
+            fnPath: "getWeekMustWatchData",
+            core: {},
+            extern: { source: "weekMustWatch" },
+          },
+        },
+        filter: {
+          fnPath: "getWeekFilterBundle",
+          core: {},
+          extern: { source: "weekMustWatch" },
+        },
+      },
+    },
+  },
+}
+```
+
+The filter function returns `FilterBundleContract`; use `kind: "dropdown"` for long lists such as weekly issue numbers, and `kind: "choice"` for a few categories.
+The "Weekly Picks" tab is only shown when the app version is greater than `3.0.37`; the plugin checks `flutterTools.getAppVersion()`.
+
 ## 4) Recommended Integration Order
 
 Wire APIs in this order so each step is easy to verify:

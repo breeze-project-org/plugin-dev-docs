@@ -115,6 +115,7 @@ export const PLUGIN_ID = "你的插件UUID";
 ```
 
 筛选函数返回 `FilterBundleContract`；期数这类长列表用 `kind: "dropdown"`，少量分类用 `kind: "choice"`。
+「每周必看」tab 仅在 App 版本大于 `3.0.37` 时显示，插件通过 `flutterTools.getAppVersion()` 判断。
 
 ## 4) 推荐起步顺序
 

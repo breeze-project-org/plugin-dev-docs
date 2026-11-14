@@ -1023,12 +1023,13 @@ a real exported callable, otherwise tapping the filter button fails.
 
 Once set, the host calls it when the user opens list filters.
 
-The filter panel renders `scheme.fields[]` as grouped single-selects: one group per `field`,
-`label` as the group title, `options[].label` as option text. `data.values` keyed by
+The filter panel renders `scheme.fields[]`: one group per `field`, `label` as the group title,
+`options[].label` as option text. `kind: "choice"` renders grouped single-selects; `kind: "dropdown"`
+renders a click-to-expand dropdown for long lists (dozens or hundreds of options), with `children`
+indented under their parent (the parent remains selectable). `data.values` keyed by
 `field.key` gives each group's default selection (`value` semantics are plugin-defined;
-the host only compares opaquely); empty means no default. `option.children` holds
-second-level linked options. `option.result.core` / `result.extern` merge into the next
-list request on confirm; merge rules: 6.2.
+the host only compares opaquely); empty means no default. `option.result.core` /
+`result.extern` merge into the next list request on confirm; merge rules: 6.2.
 
 ```ts
 import type { FilterBundleContract } from "breeze-plugin-kit";
@@ -1050,7 +1051,7 @@ type FilterBundleContract = {
 
 type FilterField = {
   key: string;
-  kind: "choice";
+  kind: "choice" | "dropdown";
   label: string;
   options: FilterOption[];
 };

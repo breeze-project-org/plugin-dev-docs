@@ -59,6 +59,8 @@ import type {
 
 Runtime global types are also injected automatically — e.g. `bridge`, `crypto`, `native`, `Temporal`, `Intl`, `BreezeHtml`, `bytesToBase64`, `bytesFromBase64` — no extra declarations needed.
 
+`FilterField.kind` supports `"choice"` and `"dropdown"`; use `"dropdown"` for long lists (e.g. weekly issue numbers) — the filter function still returns `FilterBundleContract`.
+
 ### Temporal Types
 
 After installing `breeze-plugin-kit`, use global `Temporal` with IDE completion and type checks:
